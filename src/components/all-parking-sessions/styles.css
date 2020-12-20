@@ -1,0 +1,21 @@
+.all-cards{
+
+}
+.menu{
+    margin: 0;
+    width: 100%;
+    background-color: #77C5F7 !important;
+}
+
+.tools{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.parkingSessions{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
