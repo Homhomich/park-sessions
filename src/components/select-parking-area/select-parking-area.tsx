@@ -12,16 +12,13 @@ export default function SelectParkingArea(props: Props) {
     const [parkingArea, setParkingArea] = React.useState(0);
 
     const handleSelectChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-        setParkingArea(
+        setParkingArea(() =>
             Number(event.target.value)
         );
-        handleFormSubmit();
-    };
-
-    const handleFormSubmit = () => {
-        axios.get('http://localhost:8080/all/parkingArea' + parkingArea)
+        axios.get('http://localhost:8080/parking/all/areas/' + event.target.value)
             .then(response => props.handleSelectResult(response.data))
-    }
+            .catch( error => alert('Таких зон нет!'))
+    };
 
     return (
         <div className="main">
@@ -32,7 +29,7 @@ export default function SelectParkingArea(props: Props) {
                     onChange={handleSelectChange}
                     variant={'outlined'}
                 >
-                    <MenuItem value={0}> </MenuItem>
+                    <MenuItem value={0}>Не выбрано</MenuItem>
                     <MenuItem value={1}>A1</MenuItem>
                     <MenuItem value={2}>A2</MenuItem>
                     <MenuItem value={3}>B1</MenuItem>

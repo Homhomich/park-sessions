@@ -11,6 +11,7 @@ import {ParkingSessionModel} from "../../models/parking-session-model";
 
 interface Props {
     parkingSession: ParkingSessionModel,
+    removeNewParkingSession: (parkingSession: ParkingSessionModel) => void;
 }
 
 export default function ParkingSessionCard(props: Props) {
@@ -18,7 +19,7 @@ export default function ParkingSessionCard(props: Props) {
 
     const handleSessionClose = () => {
         axios.put('http://localhost:8080/parking/leave', {parkingSessionId: parkingSession.sessionId})
-            .then(response => console.log(response))
+            .then(response => props.removeNewParkingSession(response.data))
             .catch(error => alert('Вы не оплатили парковку!'));
     }
 
@@ -33,7 +34,7 @@ export default function ParkingSessionCard(props: Props) {
                         Car: {parkingSession.car.govNum}
                     </Typography>
                     <Typography variant="body1" component="p">
-                        Time of entry: {parkingSession.entryTime}
+                        Time of entry: { new Date(parkingSession.entryTime).toLocaleString()}
                     </Typography>
                     <Typography variant="body1" component="p">
                         Parking area: {parkingSession.parkingArea.name}

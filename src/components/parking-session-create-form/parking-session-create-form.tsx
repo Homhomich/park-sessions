@@ -45,9 +45,11 @@ export default function ParkSessionCreateDialog(props: Props) {
 
     const handleFormSubmit = () => {
         const requestBody = {govNum: carNumber, parkingAreaId: parkingArea}
-        axios.post('http://localhost:8080/parking/enter', requestBody)
+        axios.post<ParkingSessionModel>('http://localhost:8080/parking/enter', requestBody)
             .then(response => props.addNewParkingSession(response.data))
+            .catch( error => console.log(error))
         setOpen(false);
+        props.closeDialog();
     }
 
     return (

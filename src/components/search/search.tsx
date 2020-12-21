@@ -1,7 +1,6 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import axios from "axios";
@@ -21,8 +20,13 @@ export default function CustomizedInputBase(props: Props) {
     }
 
     const handleSubmit = () => {
-        axios.get('http://localhost:8080/all/' + carNumber)
-            .then(response => props.handleSearchResult(response.data));
+        console.log('HIIII');
+        axios.get('http://localhost:8080/parking/all/search/' + carNumber)
+            .then(response => {
+                props.handleSearchResult(response.data);
+                console.log(response);
+            })
+            .catch(error => console.log(error));
     }
 
     return (
@@ -33,7 +37,7 @@ export default function CustomizedInputBase(props: Props) {
                 inputProps={{ 'aria-label': 'search car by number' }}
                 onChange={handleSearchClick}
             />
-            <IconButton onClick={handleSubmit} type="submit" className="iconButton" aria-label="search">
+            <IconButton onClick={handleSubmit} className="iconButton" aria-label="search">
                 <SearchIcon />
             </IconButton>
         </Paper>

@@ -33,6 +33,7 @@ export default function AllParkingSessions() {
     };
 
     const handleSearchResult = (parkingSessions: ParkingSessionModel[]) => {
+
         setParkingSessions(parkingSessions);
     }
 
@@ -41,7 +42,15 @@ export default function AllParkingSessions() {
     }
 
     const addNewParkingSession = (parkingSession: ParkingSessionModel) => {
-        setParkingSessions(Object.assign([], [...parkingSessions], parkingSession));
+        const newParkingSessions = Object.assign([], [...parkingSessions]);
+        newParkingSessions.push(parkingSession);
+        setParkingSessions(newParkingSessions);
+    }
+
+    const removeNewParkingSession = (parkingSession: ParkingSessionModel) => {
+        let newParkingSessions: ParkingSessionModel[] = Object.assign([], [...parkingSessions]);
+        newParkingSessions = newParkingSessions.filter(ps => ps.sessionId !== parkingSession.sessionId);
+        setParkingSessions(newParkingSessions);
     }
 
     const closeDialog = () => {
@@ -68,8 +77,8 @@ export default function AllParkingSessions() {
             </div>
             <div className="parkingSessions">
                 {parkingSessions.map(session =>
-                    <div>
-                        <ParkingSessionCard key={session.sessionId} parkingSession={session}/>
+                    <div key={session.sessionId}>
+                        <ParkingSessionCard removeNewParkingSession={removeNewParkingSession} parkingSession={session}/>
                     </div>
                 )}
             </div>

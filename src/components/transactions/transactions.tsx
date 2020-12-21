@@ -6,7 +6,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import './styles.css';
-import {Operator} from "../../models/operator";
 import axios from "axios";
 
 interface Props {
@@ -17,7 +16,6 @@ export default function Transactions(props: Props) {
     const [open, setOpen] = React.useState(true);
     const [sessionId, setSessionId] = React.useState(1);
     const [amountOfMoney, setAmountOfMoney] = React.useState('');
-    const [operator, setOperator] = React.useState<Operator>();
 
     const handleClose = () => {
         setOpen(false);
@@ -36,39 +34,18 @@ export default function Transactions(props: Props) {
         )
     }
 
-    const handleOperatorInfoChange = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-        switch (event.target.name) {
-            case ('operatorId'):
-                setOperator({
-                    operatorId: Number(event.target.name),
-                    operatorDetail: operator?.operatorDetail,
-                    name: operator?.name,
-                });
-                break;
-            case ('operatorName'):
-                setOperator({
-                    operatorId: operator?.operatorId,
-                    operatorDetail: operator?.operatorDetail,
-                    name: String(event.target.value),
-                });
-                break;
-            case ('operatorDetail'):
-                setOperator({
-                    operatorId: operator?.operatorId,
-                    operatorDetail: String(event.target.value),
-                    name: operator?.name,
-                });
-                break;
-        }
-
-    }
 
     const handleFormSubmit = () => {
-         const requestBody = {parkingSessionId: sessionId, operator: operator, amount: amountOfMoney}
-         axios.post('http://localhost:8080/transaction/pay', requestBody)
-             .then(() => alert('Оплата прошла успешно!'))
-             .catch(error => alert('Error!'))
-         setOpen(false);
+        const requestBody = {
+            parkingSessionId: sessionId,
+            operator: {operatorId: 1, name: 'react_app', operatorDetail: 'main client'},
+            amount: amountOfMoney
+        }
+        axios.post('http://localhost:8080/transaction/pay', requestBody)
+            .then(() => alert('Оплата прошла успешно!'))
+            .catch(error => alert('Error!'))
+        setOpen(false);
+        props.closeDialog();
     }
 
     return (
@@ -92,30 +69,6 @@ export default function Transactions(props: Props) {
                         fullWidth
                         required
                         onChange={handleSessionIdChange}
-                    />
-                    <TextField
-                        margin="dense"
-                        id="operatorId"
-                        label="Operator Id"
-                        fullWidth
-                        required
-                        onChange={handleOperatorInfoChange}
-                    />
-                    <TextField
-                        margin="dense"
-                        id="operatorName"
-                        label="Operator name"
-                        fullWidth
-                        required
-                        onChange={handleOperatorInfoChange}
-                    />
-                    <TextField
-                        margin="dense"
-                        id="operatorDetail"
-                        label="Operator detail"
-                        fullWidth
-                        required
-                        onChange={handleOperatorInfoChange}
                     />
                 </DialogContent>
                 <DialogActions>
