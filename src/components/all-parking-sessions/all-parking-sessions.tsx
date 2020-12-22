@@ -11,12 +11,16 @@ import Transactions from "../transactions/transactions";
 import Search from "../search/search";
 import SelectParkingArea from "../select-parking-area/select-parking-area";
 import axios from "axios";
+import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
+import OwnersList from "../owners/owners";
 
 export default function AllParkingSessions() {
     const [parkingSessions, setParkingSessions] = useState<ParkingSessionModel[]>([]);
     const [chosenMenuItem, setChosenMenuItem] = React.useState('activeSessions');
     const [addDialog, setAddDialog] = React.useState(false);
     const [payDialog, setPayDialog] = React.useState(false);
+    const [ownersDialog, setOwnersDialog] = React.useState(false);
+
 
 
     const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
@@ -29,11 +33,14 @@ export default function AllParkingSessions() {
                 break;
             case ('pay'):
                 setPayDialog(true);
+                break;
+            case ('topOwners'):
+                setOwnersDialog(true);
+                break;
         }
     };
 
     const handleSearchResult = (parkingSessions: ParkingSessionModel[]) => {
-
         setParkingSessions(parkingSessions);
     }
 
@@ -57,6 +64,7 @@ export default function AllParkingSessions() {
         setChosenMenuItem('activeSessions');
         setAddDialog(false);
         setPayDialog(false);
+        setOwnersDialog(false);
     }
 
     useEffect(() => {
@@ -70,6 +78,7 @@ export default function AllParkingSessions() {
                 <BottomNavigationAction label="Active sessions" value="activeSessions" icon={<DriveEtaIcon/>}/>
                 <BottomNavigationAction label="Add session" value="addSession" icon={<AddCircleOutlineOutlinedIcon/>}/>
                 <BottomNavigationAction label="Pay" value="pay" icon={<AccountBalanceWalletOutlinedIcon/>}/>
+                <BottomNavigationAction label="Top owners" value="topOwners" icon={<PeopleOutlineIcon/>}/>
             </BottomNavigation>
             <div className="tools">
                 <Search handleSearchResult={handleSearchResult}/>
@@ -86,6 +95,8 @@ export default function AllParkingSessions() {
                 <ParkSessionCreateDialog closeDialog={closeDialog} addNewParkingSession={addNewParkingSession}/> :
                 <br/>}
             {payDialog ? <Transactions closeDialog={closeDialog}/> : <br/>}
+            {ownersDialog ? <OwnersList closeDialog={closeDialog}/> : <br/>}
+
 
         </div>
     );
